@@ -1,0 +1,141 @@
+xdmp:document-insert("/kdrama1.xml",<kdramas xmlns:k="http://example.com/drama">
+<k:title>Kdrama Details
+</k:title>
+<k:kdrama>
+<k:title lang="korean">Summer strike
+</k:title>
+<k:year>2020
+</k:year>
+<k:description>warm kdrama
+</k:description>
+</k:kdrama>
+<k:kdrama>
+<k:title lang="korean">Squid game 2
+</k:title>
+<k:year>2024
+</k:year>
+<k:genre>Thriller
+</k:genre>
+<k:leadactors>
+<k:name>top
+</k:name>
+</k:leadactors>
+<k:leadactors>
+<k:name>Gong Yoo
+</k:name>
+</k:leadactors>
+</k:kdrama>
+</kdramas>)
+
+
+1.comment
+xquery version "3.1";
+(: this is a comment :)
+
+2.declare and use namespace
+declare namespace k="http://example.com/drama";
+let $doc:=fn:doc("/kdrama1.xml")
+return $doc//k:kdrama
+
+3.variables
+xquery version "3.1";
+declare namespace k="http://example.com";
+declare variable $intvar as xs:integer:=30;
+declare variable $stringvar as xs:string:="name";
+declare variable $boolvar :=fn:false();
+declare variable $seqvar :=("name",1,"age",20);
+declare variable $itemvar as xs:string*:=("item1","item2");
+declare variable $mapvar:=(
+("key1","value1"),
+("key2","value2")
+);
+let $doc:=fn:doc("/kdrama.xml")
+return <result>
+<variables>
+<int>{$intvar}</int>
+<string>{$stringvar}</string>
+<bool>{$boolvar}</bool>
+<seq>{$seqvar}</seq></variables>
+<items>
+{
+for $item in $itemvar
+return <item>{$item}</item>
+}
+</items>
+<map>
+{
+for $key in $mapvar
+return <keys>{$key}</keys>
+}
+</map>
+</result>
+
+
+4.let
+let $int1:=(1 to 5)
+<letvalue>{$int1}</letvalue>
+
+5.flowr
+<dramas>
+{
+let $title:=$doc//kdrama/title/text()
+for $t in $title 
+where starts-with($t,"S")
+order by $t descending
+return <title>{$t}</title>
+}
+</dramas>
+
+6.if elseif else
+<ifelse>
+{
+if(($title )="Summer strike")then
+ <message>drama exist</message>
+else if(($title )!="Summer strike") then
+ <message>drama does not exist</message>
+else
+ <message>no</message>
+}
+</ifelse>
+
+7.function
+declare function k:myfunction($input as xs:string) as element(message){
+if($input="Summer strike")then
+ <message>drama exist</message>
+else if($input !="Summer strike") then
+ <message>drama does not exist</message>
+else
+ <message>no</message>
+};
+{
+for $t in $title
+return k:myfunction($t)}
+
+8.try-catch
+declare function k:myfunction($input as xs:string) as element(message){
+try{
+if($input="Summer strike")then
+ <message>drama exist</message>
+else if($input !="Summer strike") then
+ <message>drama does not exist</message>
+else
+ raiseError("not allowed")
+ <message>no</message>
+
+ }catch $e{
+ "error message"|$e/message
+ }
+};
+
+9.xdmp:log()
+
+10.index
+range index
+for $m in //movie
+where $m/releaseYear > 2015 and $m/releaseYear < 2020
+return $m/title
+
+word index
+for $m in //movie
+where contains($m/description, "drama")
+return $m/title
