@@ -1,0 +1,102 @@
+1.create database, forest in admin interface
+http://localhost:8001/
+http://localhost:8000/qconsole/
+
+2.insert data into forest
+xdmp:document-insert("/kdrama.xml",
+<kdramas>
+<title>Kdrama Details</title>
+<kdrama>
+ <title lang="korean">Summer strike</title>
+  <year>2020</year>
+</kdrama>
+<kdrama>
+ <title lang="korean">Squid game 2</title>
+  <year>2024</year>
+  <genre>Thriller</genre>
+  <leadactors>
+  <name>top</name>
+  </leadactors>
+  <leadactors>
+  <name>Gong Yoo</name>
+  </leadactors>
+</kdrama>
+
+</kdramas>)
+
+
+3.view content of forest
+doc("/kdrama.xml")
+
+4.find anywhere in the document
+let $doc:=fn:doc("/kdrama.xml")
+return $doc//title
+
+5.absolute path
+let $doc:=fn:doc("/kdrama.xml")
+return $doc/kdramas/kdrama/title
+
+6.return true or false if the element value exist
+let $doc:=fn:doc("/kdrama.xml")
+return $doc/kdramas/kdrama/title="Squid game 2"
+
+7.descendants
+let $doc:=fn:doc("/kdrama.xml")
+return $doc/kdramas/kdrama/..
+
+8.Find all actor names under the leadActors
+let $doc:=fn:doc("/kdrama.xml")
+return $doc/kdramas/kdrama/leadactors/name/string()
+
+9.select element with position
+let $doc:=fn:doc("/kdrama.xml")
+return $doc/kdramas/kdrama[2]
+
+let $doc:=fn:doc("/kdrama.xml")
+return $doc/kdramas/kdrama[last()]
+
+10.select if the attribute value matches
+let $doc:=fn:doc("/kdrama.xml")
+return $doc/kdramas/kdrama/title[@lang="korean"]
+
+11.find all elements,attributes
+let $doc:=fn:doc("/kdrama.xml")
+return $doc//*
+return $doc//@*]
+
+12. return the nodes()
+let $doc:=fn:doc("/kdrama.xml")
+return $doc/kdramas/kdrama/n
+
+13.functions
+--count
+let $doc:=fn:doc("/kdrama.xml")
+return count($doc/kdramas/kdrama/title)
+--contains
+let $doc:=fn:doc("/kdrama.xml")
+return $doc//title[contains(text(),"Summer strike")]
+---normalize-space
+let $doc:=fn:doc("/kdrama.xml")
+return $doc//title[normalize-space()]
+---concat
+let $doc:=fn:doc("/kdrama.xml")
+return concat("favo drama:",$doc//kdramas/kdrama[1]/title/text())
+
+14.update doc
+let $doc:=fn:doc("/kdrama.xml")
+return if(empty($doc/kdramas/kdrama[1]/description)) then
+ xdmp:node-insert-child($doc/kdramas/kdrama[1],<description>warm kdrama</description>)
+else
+"already exist"
+
+15.delete a doc
+xdmp:document-delete("/kdrama_namespace.xml")
+
+16.  create namespace in a doc
+xdmp:document-insert("/kdrama_namespace.xml",<kdramas xmlns:k="http://example.com/drama">
+<k:kdrama><k:title>this contains a list of kdrama</k:title></k:kdrama>
+</kdramas>)
+
+17. fetch data using namespace
+declare namespace k="http://example.com/drama";
+doc("/kdrama_namespace.xml")//k:title
