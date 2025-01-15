@@ -56,4 +56,3 @@ return <title>{$t}</title>
 {
 for $t in $title
 return k:myfunction($t)}
-</result>
