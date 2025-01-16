@@ -1,0 +1,92 @@
+1.fn:doc
+let $doc:=fn:doc("/kdrama.xml")
+return $doc
+
+2.fn:string, fn:string-join
+let $doc:=fn:doc("/kdrama.xml")
+return fn:string-join($doc//title[1],",")
+
+
+3.fn:number
+let $doc:=fn:doc("/kdrama.xml")
+return fn:number($doc/kdramas/kdrama[1]/year)
+
+
+4.fn:concat
+let $doc:=fn:doc("/kdrama.xml")
+return fn:concat($doc/kdramas/kdrama[1]/year,'',$doc/kdramas/kdrama[1]/title)
+
+5.fn:substring
+let $doc:=fn:doc("/kdrama.xml")
+return fn:substring($doc/kdramas/kdrama[1]/title,1,3)
+
+6.fn:string-length
+let $doc:=fn:doc("/kdrama.xml")
+return fn:string-length($doc/kdramas/kdrama[1]/title)
+
+7.fn:uppser-case,fn:lower-case
+let $doc:=fn:doc("/kdrama.xml")
+return fn:upper-case($doc/kdramas/kdrama[1]/title)
+
+8.fn:count
+let $doc:=fn:doc("/kdrama.xml")
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:count($seqvar)\
+
+9.fn:head,fn:tail
+let $doc:=fn:doc("/kdrama.xml")
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:head($seqvar)
+let $doc:=fn:doc("/kdrama.xml")
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:tail($seqvar)
+
+
+10.fn:reverse
+let $doc:=fn:doc("/kdrama.xml")
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:reverse($seqvar)
+
+
+11.fn:equals or fn:compare
+0=equals1=not equal
+let $doc:=fn:doc("/kdrama.xml")
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:compare($doc/kdramas/kdrama[1]/title/text(),$doc/kdramas/kdrama[2]/title/text())
+
+12.fn:abs, fn:round
+return fn:round(3.6789)
+
+13.fn:exists
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:exists($seqvar)
+
+14.fn:empty
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:empty($seqvar)
+
+15.fn:distinct-values
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:distinct-values($seqvar)
+
+16.fn:not
+let $seqvar :=($doc/kdramas/kdrama[1]/title,$doc/kdramas/kdrama[2]/title)
+return fn:not(fn:empty($seqvar))
+
+17.fn:data
+return fn:data($doc/kdramas/kdrama[1]/title)
+
+
+18.fn:name
+return fn:name($doc/kdramas/kdrama[1]/title)
+
+19.fn:replace
+return fn:replace(fn:data($doc/kdramas/kdrama[1]/title),"strike","cool")
+
+20.fn:max
+let $seqvar1 :=($doc/kdramas/kdrama[1]/year,$doc/kdramas/kdrama[2]/year)
+return fn:max($seqvar1)
+
+21.subsequence
+let $seqvar1 :=($doc/kdramas/kdrama[1]/year,$doc/kdramas/kdrama[2]/year)
+return fn:subsequence($seqvar1,1,1)
